@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorSozluk.Infrastructure.Persistence.EntityConfigurations
+namespace BlazorSozluk.Api.Infrastructure.Persistence.EntityConfigurations
 {
     public abstract class BaseEntityConfiguration<T>: IEntityTypeConfiguration<T> where T: BaseEntity
     {

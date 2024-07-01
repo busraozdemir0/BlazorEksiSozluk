@@ -8,12 +8,16 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorSozluk.Infrastructure.Persistence.Context
+namespace BlazorSozluk.Api.Infrastructure.Persistence.Context
 {
     public class BlazorSozlukContext : DbContext
     {
         public const string DEFAULT_SCHEMA = "dbo";
 
+        public BlazorSozlukContext()
+        {
+            
+        }
         public BlazorSozlukContext(DbContextOptions options) : base(options)
         {
         }
@@ -27,6 +31,17 @@ namespace BlazorSozluk.Infrastructure.Persistence.Context
         public DbSet<EntryCommentFavorite> EntryCommentFavorites { get; set; }
         public DbSet<EmailConfirmation> EmailConfirmations { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured) // Parametresiz constructor olusturuldugunda burasi false olacagi icin icerisindeki islemler gerceklesecek
+            {
+                var connStr = "Data Source=DESKTOP-43HIK1B; Initial Catalog=BlazorEksiSozlukDB; Trusted_Connection=True; TrustServerCertificate=True;";
+                optionsBuilder.UseSqlServer(connStr, opt =>
+                {
+                    opt.EnableRetryOnFailure();
+                });
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
