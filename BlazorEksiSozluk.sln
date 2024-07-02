@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.Projections.Vo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.WebApp", "src\Clients\BlazorWeb\BlazorSozluk.WebApp\BlazorSozluk.WebApp.csproj", "{A9E3D34E-3AA8-44A7-AA32-B9A69D0FC257}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSozluk.Api.Infrastructure.Persistence", "src\Api\Infrastructure\BlazorSozluk.Api.Infrastructure.Persistence\BlazorSozluk.Api.Infrastructure.Persistence.csproj", "{76500CAB-0585-4AEB-83D9-2F3791DBB806}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.Api.Infrastructure.Persistence", "src\Api\Infrastructure\BlazorSozluk.Api.Infrastructure.Persistence\BlazorSozluk.Api.Infrastructure.Persistence.csproj", "{76500CAB-0585-4AEB-83D9-2F3791DBB806}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

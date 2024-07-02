@@ -23,9 +23,12 @@ namespace BlazorSozluk.Api.Infrastructure.Persistence.Extensions
                 });
             });
 
-            return services;
+            // Bogus kutuphanesi yardimiyla seed datalarin olusturulmasi icin
+            //* Bir kere calistirdigimiz icin bir daha calistirmaya gerek yok
+            //var seedData = new SeedData();
+            //seedData.SeedAsync(configuration).GetAwaiter().GetResult();
 
-               
+            return services; 
         }
     }
 }
