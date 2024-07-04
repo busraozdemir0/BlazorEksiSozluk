@@ -1,4 +1,6 @@
-﻿using BlazorSozluk.Common.Models.RequestModels;
+﻿using BlazorSozluk.Api.Application.Features.Commands.User.ConfirmEmail;
+using BlazorSozluk.Common.Events.User;
+using BlazorSozluk.Common.Models.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IMediator mediator;
 
@@ -39,6 +41,25 @@ namespace BlazorSozluk.Api.WebApi.Controllers
         {
             var guid = await mediator.Send(command);
 
+            return Ok(guid);
+        }
+
+        [HttpPost]
+        [Route("Confirm")]
+        public async Task<IActionResult> ConfirmEmail(Guid id)
+        {
+            var guid = await mediator.Send(new ConfirmEmailCommand() { ConfirmationId=id});
+            return Ok(guid);
+        }
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordCommand command)
+        {
+            if (!command.UserId.HasValue) // Eger UserId bilgisi bos ise
+                command.UserId = UserId; // JWT token ile alinan UserId bilgisini aktar(Yani giris yapan kisinin id'si)
+
+            var guid = await mediator.Send(command);
             return Ok(guid);
         }
     }

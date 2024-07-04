@@ -11,6 +11,8 @@ namespace BlazorSozluk.Common.Infrastructure
 {
     public static class QueueFactory
     {
+        // https://gokhan-gokalp.com/rabbitmq-nedir-ve-windowsa-kurulumu/
+
         // RabbitMQ'ye mesaj gonderebilmek icin
         public static void SendMessageToExchange(string exchangeName, string exchangeType, string queueName, object obj)
         {
