@@ -9,6 +9,6 @@ namespace BlazorSozluk.Api.WebApi.Controllers
     public class BaseController : ControllerBase
     {
         // JWT token ile giris yapan id'sini cekiyoruz (API tarafina istek yapan kullanicinin id'si)
-        public Guid UserId => new(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        public Guid? UserId => Guid.NewGuid(); /*new(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);*/
     }
 }

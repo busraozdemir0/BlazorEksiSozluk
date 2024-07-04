@@ -199,10 +199,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await query.SingleOrDefaultAsync();
 
     }
-    public IQueryable<TEntity> AsQueryable()
-    {
-        throw new NotImplementedException();
-    }
+    public virtual IQueryable<TEntity> AsQueryable() => entity.AsQueryable();
 
     public virtual Task BulkDeleteById(IEnumerable<Guid> ids)
     {
