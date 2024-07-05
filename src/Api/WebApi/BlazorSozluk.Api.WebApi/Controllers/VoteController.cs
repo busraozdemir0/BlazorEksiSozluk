@@ -21,7 +21,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("Entr/y{entryId}")]
+        [Route("Entry/{entryId}")]
         public async Task<IActionResult> CreateEntryVote(Guid entryId, VoteType voteType=VoteType.UpVote)
         {
             var result = await mediator.Send(new CreateEntryVoteCommand(entryId, voteType, UserId.Value));

@@ -13,18 +13,22 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             bool useDefaultHandlingResponse = true,
             Func<HttpContext, Exception, Task> handleException = null)
         {
-            app.Run(context =>
+            app.UseExceptionHandler(options =>
             {
-                // Bir exception olustugu zaman bu exception'un detaylarina ihtiyacimiz olacak
-                var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
+                options.Run(context =>
+                {
+                    // Bir exception olustugu zaman bu exception'un detaylarina ihtiyacimiz olacak
+                    // Eger programlama yaparken handle edilmemis bir exception firlatilirsa bu metodlar ile handle edilecek ve hatanin tum detaylarini gorecegiz.
+                    var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
 
-                if (!useDefaultHandlingResponse && handleException == null)
-                    throw new ArgumentNullException(nameof(handleException), $"{nameof(handleException)} cannot be null when {nameof(useDefaultHandlingResponse)} is false");
+                    if (!useDefaultHandlingResponse && handleException == null)
+                        throw new ArgumentNullException(nameof(handleException), $"{nameof(handleException)} cannot be null when {nameof(useDefaultHandlingResponse)} is false");
 
-                if (!useDefaultHandlingResponse && handleException != null)
-                    return handleException(context, exceptionObject.Error);
+                    if (!useDefaultHandlingResponse && handleException != null)
+                        return handleException(context, exceptionObject.Error);
 
-                return DefaultHandleException(context, exceptionObject.Error, includeExceptionDetails);
+                    return DefaultHandleException(context, exceptionObject.Error, includeExceptionDetails);
+                });
             });
 
             return app;
@@ -39,8 +43,9 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             if (exception is UnauthorizedAccessException)
                 statusCode = HttpStatusCode.Unauthorized;
 
-            if(exception is DatabaseValidationException)
+            if (exception is DatabaseValidationException)
             {
+                statusCode = HttpStatusCode.BadRequest;
                 var validationResponse = new ValidationResponseModel(exception.Message);
                 await WriteResponse(context, statusCode, validationResponse);
                 return;
@@ -53,7 +58,7 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             };
 
             await WriteResponse(context, statusCode, res);
-            
+
         }
 
         private static async Task WriteResponse(HttpContext context, HttpStatusCode statusCode, object responseObj)
@@ -61,7 +66,7 @@ namespace BlazorSozluk.Api.WebApi.Infrastructure.Extensions
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            await context.Response.WriteAsJsonAsync(responseObj)
+            await context.Response.WriteAsJsonAsync(responseObj);
         }
     }
 }
