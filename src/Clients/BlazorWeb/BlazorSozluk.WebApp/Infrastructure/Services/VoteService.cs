@@ -14,14 +14,14 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
 
         public async Task DeleteEntryVote(Guid entryId)
         {
-            var response = await client.PostAsync($"api/Vote/DeleteEntryVote/{entryId}", null);
+            var response = await client.PostAsync($"https://localhost:7068/api/Vote/DeleteEntryVote/{entryId}", null);
             if (!response.IsSuccessStatusCode)
                 throw new Exception("DeleteEntryVote error");
         }
 
         public async Task DeleteEntryCommentVote(Guid entryCommentId)
         {
-            var response = await client.PostAsync($"api/Vote/DeleteEntryCommentVote/{entryCommentId}", null);
+            var response = await client.PostAsync($"https://localhost:7068/api/Vote/DeleteEntryCommentVote/{entryCommentId}", null);
             if (!response.IsSuccessStatusCode)
                 throw new Exception("DeleteEntryCommentVote error");
         }
@@ -49,13 +49,13 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
         // Vote islemlerinde Up ve Down icin tek bir metod olusturup bunu kullandiriyoruz
         private async Task<HttpResponseMessage> CreateEntryVote(Guid entryId, VoteType voteType = VoteType.UpVote)
         {
-            var result = await client.PostAsync($"/api/vote/entry/{entryId}?voteType={voteType}", null);
+            var result = await client.PostAsync($"https://localhost:7068/api/vote/entry/{entryId}?voteType={voteType}", null);
             return result;
         }
 
         private async Task<HttpResponseMessage> CreateEntryCommentVote(Guid entryCommentId, VoteType voteType = VoteType.UpVote)
         {
-            var result = await client.PostAsync($"/api/vote/entrycomment/{entryCommentId}?voteType={voteType}", null);
+            var result = await client.PostAsync($"https://localhost:7068/api/vote/entrycomment/{entryCommentId}?voteType={voteType}", null);
             return result;
         }
     }

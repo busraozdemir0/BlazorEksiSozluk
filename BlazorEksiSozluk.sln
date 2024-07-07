@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.WebApp", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.Api.Infrastructure.Persistence", "src\Api\Infrastructure\BlazorSozluk.Api.Infrastructure.Persistence\BlazorSozluk.Api.Infrastructure.Persistence.csproj", "{76500CAB-0585-4AEB-83D9-2F3791DBB806}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSozluk.Projections.AppUser", "src\Projections\BlazorSozluk.Projections.AppUser\BlazorSozluk.Projections.AppUser.csproj", "{31F8B168-7622-4291-A3E1-AB88B87A7B36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSozluk.Projections.AppUser", "src\Projections\BlazorSozluk.Projections.AppUser\BlazorSozluk.Projections.AppUser.csproj", "{31F8B168-7622-4291-A3E1-AB88B87A7B36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -25,6 +25,15 @@ builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.AddApplicationRegistration();
 builder.Services.AddInfrastructureRegistration(builder.Configuration);
 
+// Add Cors => bir wep api'ye disaridan gelen isteklere izin vermek icin eklenmesi gerekir.
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    // Her turlu istek ulasabilmesi icin hepsine izin verdik
+    builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +50,8 @@ app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("MyPolicy");
 
 app.MapControllers();
 

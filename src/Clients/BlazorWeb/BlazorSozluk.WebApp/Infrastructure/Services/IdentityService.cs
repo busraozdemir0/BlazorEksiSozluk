@@ -42,7 +42,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
         public async Task<bool> Login(LoginUserCommand command)
         {
             string responseStr;
-            var httpResponse = await httpClient.PostAsJsonAsync("/api/User/Login", command);
+            var httpResponse = await httpClient.PostAsJsonAsync("https://localhost:7068/api/User/Login", command);
 
             if (httpResponse != null && !httpResponse.IsSuccessStatusCode)
             {
