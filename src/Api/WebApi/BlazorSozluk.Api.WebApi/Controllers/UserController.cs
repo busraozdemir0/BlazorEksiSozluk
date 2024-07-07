@@ -3,6 +3,7 @@ using BlazorSozluk.Api.Application.Features.Queries.GetUserDetail;
 using BlazorSozluk.Common.Events.User;
 using BlazorSozluk.Common.Models.RequestModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
             var guid = await mediator.Send(command);
@@ -53,6 +55,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Update")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
         {
             var guid = await mediator.Send(command);
@@ -70,6 +73,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("ChangePassword")]
+        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordCommand command)
         {
             if (!command.UserId.HasValue) // Eger UserId bilgisi bos ise

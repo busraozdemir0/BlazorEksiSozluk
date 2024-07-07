@@ -1,0 +1,69 @@
+﻿@page "/login"
+
+<div class="login-container">
+    <div class="row justify-content-center align-items-start h-100">
+
+        <div class="login-form">
+
+            <EditForm Model="@loginCommand" OnValidSubmit="LoginProcess">
+
+                @if (errorText != string.Empty) @* errorText bos degilse Login olurken bir hata alindiysa kirmizi sekilde uyari gosterilecek. *@
+                {
+                    <span class="text-danger">@errorText</span>
+                    <br />
+                }
+
+                <div class="form-group">
+                    <input @bind-value="loginCommand.EmailAddress" class="form-control" type="text" placeholder="Email Adres" />
+                </div>
+                <br />
+                <div class="form-group">
+                    <input @bind-value="loginCommand.Password" class="form-control" type="password" placeholder="Parola" />
+                </div>
+                <br />
+                <div class="form-group">
+                    <button class="btn btn-success btn-sozluk">Giriş Yap</button>
+                </div>
+
+            </EditForm>
+
+        </div>
+
+    </div>
+</div>
+
+
+@code {
+    [Inject]
+    IIdentityService identityService { get; set; }
+
+    [Inject]
+    NavigationManager navigationManager { get; set; }
+
+    private LoginUserCommand loginCommand = new();
+
+    private string errorText = "";
+
+    // Login butonuna basildiginda gerceklesecek olan islemler
+    public async Task LoginProcess()
+    {
+        try
+        {
+            var result = await identityService.Login(loginCommand);
+
+            if (result) // Eger basarili bir sekilde yapildiysa ana sayfaya yonlendirecegiz.
+            {
+                errorText = "";
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                errorText = "Giriş yapma işlemi bilinmeyen nedenlerle başarısız oldu.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorText = ex.Message;
+        }
+    }
+}

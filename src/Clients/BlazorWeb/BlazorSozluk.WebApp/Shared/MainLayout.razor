@@ -18,19 +18,20 @@
                        @bind-value:event="oninput"
                        @onkeypress="@SearchKeyDown"
                        @onfocusout="@OnSearchFocusOut"
-                       placeholder="Search in Sozluk" />
+                       placeholder="Sözlükte Ara" />
             </div>
 
             <button type="button" class="btn btn-sozluk btn-success"
                     @onclick="@Search"
-                    @onfocusout="@OnSearchFocusOut">  @* Arama butonuna basildiktan sonra input'a girilen kelimeyle başlayan entry'lerin arama listesinin kapanmasi icin *@
+                    @onfocusout="@OnSearchFocusOut">
+                @* Arama butonuna basildiktan sonra input'a girilen kelimeyle başlayan entry'lerin arama listesinin kapanmasi icin *@
                 <i class="fa fa-search h-75"></i>
             </button>
         </div>
 
         @* Arama sonuclarini gostermek icin *@
 
-        @if (showSearchResult) 
+        @if (showSearchResult)
         {
             <ul class="list-group">
 
@@ -46,23 +47,25 @@
         }
 
     </div>
-    
-@*     <AuthorizeView>
+
+    @* Sisteme kullanicinin giris yapmis olup olmamasina gore butonlari gosterdigimiz kisim *@
+    <AuthorizeView>
+        @* Giris yapmissa *@
         <Authorized>
             <div class="top-nav">
-                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Create Entry" @onclick="@NavigateCreateEntryPage" />
+                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Konu Yarat" @onclick="@NavigateCreateEntryPage" />
                 <input type="button" class="form-control btn-success btn-sozluk w-auto" value="ME" @onclick="@NavigateMEPage" />
-                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Logout" @onclick="@NavigateLogoutPage" />
+                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Çıkış Yap" @onclick="@NavigateLogoutPage" />
             </div>
         </Authorized>
 
+        @* Giris yapmamissa *@
         <NotAuthorized>
             <div class="top-nav">
-                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Login" @onclick="@NavigateLoginPage" />
+                <input type="button" class="form-control btn-success btn-sozluk w-auto" value="Giriş Yap" @onclick="@NavigateLoginPage" />
             </div>
         </NotAuthorized>
-
-    </AuthorizeView> *@
+    </AuthorizeView>
 
     <div class="sub-nav">
         <a class="sub-nav-item active">bugün</a>
@@ -81,7 +84,7 @@
 <div class="page">
     <div class="sidebar">
         <h5 class="text-white text-center sidebar-heading">@EntriesSubject</h5>
-        <a class="more-data" @onclick="@RefreshEntries">refresh</a>
+        <a class="more-data" @onclick="@RefreshEntries">Yenile</a>
 
         <ul class="list-group">
             <EntriesComponent @ref=@entriesComponent />
@@ -91,7 +94,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">Hakkında</a>
         </div>
 
         <article class="content px-4">

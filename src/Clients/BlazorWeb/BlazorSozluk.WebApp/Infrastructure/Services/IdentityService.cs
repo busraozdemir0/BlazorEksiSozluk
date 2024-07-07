@@ -10,6 +10,8 @@ using BlazorSozluk.Common.Models.Queries;
 using System.Collections.Generic;
 using BlazorSozluk.WebApp.Infrastructure.Extensions;
 using BlazorSozluk.WebApp.Infrastructure.Services.Interfaces;
+using BlazorSozluk.WebApp.Infrastructure.Auth;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorSozluk.WebApp.Infrastructure.Services
 {
@@ -17,10 +19,12 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
     {
         private readonly HttpClient httpClient;
         private readonly ISyncLocalStorageService syncLocalStorageService;
-        public IdentityService(HttpClient httpClient, ISyncLocalStorageService syncLocalStorageService)
+        private readonly AuthenticationStateProvider authenticationStateProvider;
+        public IdentityService(HttpClient httpClient, ISyncLocalStorageService syncLocalStorageService, AuthenticationStateProvider authenticationStateProvider)
         {
             this.httpClient = httpClient;
             this.syncLocalStorageService = syncLocalStorageService;
+            this.authenticationStateProvider = authenticationStateProvider;
         }
 
         public bool IsLoggedIn => !string.IsNullOrEmpty(GetUserToken());
@@ -66,7 +70,8 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
                 syncLocalStorageService.SetUsername(response.UserName);
                 syncLocalStorageService.SetUserId(response.Id);
 
-                //((AuthStateProvider)authStateProvider)NotifyUserLogin(response.UserName, response.Id);
+                // Sisteme giris yapildiginda UserName ve userId bilgisini set ediyoruz
+                ((AuthStateProvider)authenticationStateProvider).NotifyUserLogin(response.UserName, response.Id);
 
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", response.UserName);
 
@@ -82,7 +87,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
             syncLocalStorageService.RemoveItem(LocalStorageExtensions.UserName);
             syncLocalStorageService.RemoveItem(LocalStorageExtensions.UserId);
 
-            //((AuthStateProvider)authStateProvider)NotifyUserLogout();
+            ((AuthStateProvider)authenticationStateProvider).NotifyUserLogout();
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
     }
