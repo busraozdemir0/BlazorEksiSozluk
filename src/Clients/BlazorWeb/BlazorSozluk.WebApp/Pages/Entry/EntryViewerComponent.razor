@@ -1,0 +1,90 @@
+﻿@if (Entry != null)
+{
+    <div class="card border-0">
+
+        <div class="card-body">
+            <h5 class="card-title"><a href="/entry/@Entry.Id"><strong class="entry-subject">@Entry.Subject</strong></a> </h5>
+            <br />
+            <p class="entry-content">@Entry.Content</p>
+
+            @if (MyEntries) @* Benim entry'lerim ise sadece favorileri gosterecek *@
+            {
+                <EntryFooterFavoriteComponent EntryId="@Entry.Id"
+                                              OnFavClicked="@OnFavClicked"
+                                              FavoritedCount="@Entry.FavoritedCount"
+                                              IsFavorited="@Entry.IsFavorited" />
+            }
+            else @* Eger baskasinin entry'leri ise hem favorileri hem rate'leri gosterecek *@
+            {
+                <EntryFooterRateFavoriteComponent EntryId="@Entry.Id"
+                                                  OnFavClicked="@OnFavClicked"
+                                                  OnVoteClicked="@OnVoteClicked"
+                                                  FavoritedCount="@Entry.FavoritedCount"
+                                                  IsFavorited="@Entry.IsFavorited"/>
+            }
+
+            @* Entry'nin altinda kullanicinin adi ve Entry'i olusturma tarihi cikacak *@
+            <EntryFooterAuthorComponent UserName="@Entry.CreatedByUserName"
+                                        CreateDate="@Entry.CreatedDate"/>
+
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public GetEntryDetailViewModel Entry { get; set; }
+
+    [Parameter]
+    public bool MyEntries { get; set; } // Eger giren kisinin entry'leri ise kendisine oy verebilme islemi sacma olacagi icin bu entrylerde oy verme islemini gostermeyecegiz
+
+    [Inject]
+    IVoteService voteService { get; set; }
+
+    [Inject]
+    IFavService favService { get; set; }
+
+    private async Task OnFavClicked(FavClickedEventArgs args)
+    {
+        if (args.IsFaved)
+        {
+            await favService.CreateEntryFav(args.EntryId);
+            Entry.IsFavorited=true; // favorilere eklendi mi bilgisini true yap
+            Entry.FavoritedCount++; // Favorilere eklendikten sonra FavoritedCount alaninin bir artma islemi
+        }
+        else // Favorilerden kaldirilmasi islemi
+        {
+            await favService.DeleteEntryFav(args.EntryId);
+            Entry.IsFavorited = false;
+            Entry.FavoritedCount--;
+        }
+
+        // Bu componentin kendi bilgisini hemen aninda yenileyebilmesi icin bu metodu cagiriyoruz.
+        StateHasChanged();
+
+    }
+
+    private async Task OnVoteClicked(VoteClickedEventArgs args)
+    {
+        if(args.UpVoteDeleted || args.DownVoteDeleted) // eger onceden up veya down islemine basilmissa burada up veya down'u kaldirma islemi
+        {
+            await voteService.DeleteEntryVote(args.EntryId);
+            Entry.VoteType = VoteType.None; // Up veya down islemi silindiyse bu Entry'nin VoteType'ini artik None yapiyoruz
+            return;
+        }
+
+        if (args.IsUpVoteClicked) // Eger yukari ok tusuna basilarak UpVote verme islemi yapilacak
+        {
+            await voteService.CreateEntryUpVote(args.EntryId);
+            Entry.VoteType = VoteType.UpVote;
+            return;
+        }
+
+        if(args.IsDownVoteClicked) // Eger asagi ok tusuna basilarak DownVote verme islemi yapilacak
+        {
+            await voteService.CreateEntryDownVote(args.EntryId);
+            Entry.VoteType = VoteType.DownVote;
+            return;
+        }
+    }
+}
