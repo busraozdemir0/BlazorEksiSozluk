@@ -24,17 +24,29 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await this.entity.AddAsync(entity);
         return await dbContext.SaveChangesAsync();
     }
+
     public virtual int Add(TEntity entity)
     {
-        throw new NotImplementedException();
+        this.entity.Add(entity);
+        return dbContext.SaveChanges();
     }
+
     public virtual async Task<int> AddAsync(IEnumerable<TEntity> entities)
     {
-        throw new NotImplementedException();
+        if (entities != null && !entities.Any())
+            return 0;
+
+        await entity.AddRangeAsync(entities);
+        return await dbContext.SaveChangesAsync();
     }
+
     public virtual int Add(IEnumerable<TEntity> entities)
     {
-        throw new NotImplementedException();
+        if (entities != null && !entities.Any())
+            return 0;
+
+        entity.AddRange(entity);
+        return dbContext.SaveChanges();
     }
 
     #region Update Methods

@@ -48,13 +48,13 @@
     {
         if (args.IsFaved)
         {
-            await favService.CreateEntryFav(args.EntryId);
+            await favService.CreateEntryFav(args.EntryId.Value);
             Entry.IsFavorited=true; // favorilere eklendi mi bilgisini true yap
             Entry.FavoritedCount++; // Favorilere eklendikten sonra FavoritedCount alaninin bir artma islemi
         }
         else // Favorilerden kaldirilmasi islemi
         {
-            await favService.DeleteEntryFav(args.EntryId);
+            await favService.DeleteEntryFav(args.EntryId.Value);
             Entry.IsFavorited = false;
             Entry.FavoritedCount--;
         }

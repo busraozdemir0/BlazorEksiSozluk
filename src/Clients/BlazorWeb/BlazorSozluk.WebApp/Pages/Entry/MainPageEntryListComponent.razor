@@ -1,9 +1,6 @@
-﻿
-
-
-@if(entries != null)
+﻿@if (entries != null && entries.Results.Count > 0)
 {
-    foreach(var entry in entries.Results)
+    foreach (var entry in entries.Results)
     {
         @* EntryViewerComponent bir entry'i barindiran component'dir. Listelenecek tum component'ler arasinda dolasarak bu component icerisine icinde bulundugumuz entry'i gondererek ana sayfada gosterilmesini sagliyoruz *@
         <EntryViewerComponent Entry="@entry" />
@@ -20,6 +17,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await entryService.GetMainPageEntries(1, 20);
+        entries = await entryService.GetMainPageEntries(1, 20);
     }
 }
+
+

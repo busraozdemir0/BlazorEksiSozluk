@@ -50,10 +50,11 @@ app.UseHttpsRedirection();
 // Hatalarin handle edilmesi
 app.ConfigureExceptionHandling(app.Environment.IsDevelopment());
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseCors("MyPolicy");
+
+app.UseAuthentication();
+app.UseRouting();
+app.UseAuthorization();
 
 app.MapControllers();
 

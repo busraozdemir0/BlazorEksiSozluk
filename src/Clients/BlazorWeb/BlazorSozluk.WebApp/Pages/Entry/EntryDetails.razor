@@ -1,0 +1,68 @@
+﻿@* Eger burasi component degil de sayfa olacaksa page direktifi verilmelidir *@
+@page "/entry/{id:guid}"
+
+@* ENTRY DETAİL SAYFASİ *@
+
+@if(entry is not null)
+{
+    @* İlgili entry'nin ustte gozukmesi icin *@
+    <EntryViewerComponent Entry="@entry" />
+    <br />
+
+    @* Bu entry'e ait yorumlarin entry'nin altinda listelenmesi icin  *@
+     if (comments is not null)
+    {
+        foreach (var comment in comments.Results)
+        {
+            <EntryCommentViewerComponent EntryComment="@comment"/>
+        }
+    }
+
+    <br />
+
+    <AuthorizeView>
+        @* Eger kisi login olmussa Entry'e ait yorum ekleme islemi gerceklestirebilecek
+        (Giris yapmissa yorum ekleme kismi gozuksun) *@
+        
+        <Authorized>
+            <br />
+            <br />
+            <CreateEntryCommentComponent EntryId="@entry.Id"
+                                         EntrySubject="@entry.Subject"
+                                         OnClicked="@OnCommentCreate"/>
+
+        </Authorized>
+    </AuthorizeView>
+}
+
+@code {
+    [Parameter]
+    public Guid id{ get; set; }
+
+    [Inject]
+    IEntryService entryService { get; set; }
+
+    private GetEntryDetailViewModel entry = new();
+    private PagedViewModel<GetEntryCommentsViewModel> comments = new();
+    private int currentPage = 1; // Comment'leri listelerken icinde bulundugumuz sayfa 1. sayfa olarak kabul edecegiz
+
+    protected override async Task OnParametersSetAsync()
+    {
+        entry = await entryService.GetEntryDetail(id);
+
+        await RefreshComments(1);
+
+        currentPage = comments.PageInfo.CurrentPage;
+    }
+
+    public async Task OnCommentCreate(CreateEntryCommentCommand command)
+    {
+        await entryService.CreateEntryComment(command); // icinde bulundugumuz entry'e yorum yapma islemi
+        await RefreshComments(currentPage); // Yorum yapildiktan sonra yorumlarin yenilenmesi icin
+    }
+
+    private async Task RefreshComments(int pageNumber)
+    {
+        comments = await entryService.GetEntryComments(entry.Id, pageNumber, 10);
+    }
+}

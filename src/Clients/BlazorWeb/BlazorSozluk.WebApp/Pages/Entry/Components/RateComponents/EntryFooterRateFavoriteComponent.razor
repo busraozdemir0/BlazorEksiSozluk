@@ -3,12 +3,12 @@
 <div class="container">
     <span>
         @* Ok rengini; oy verilmis ise rengini success yani yesil yap oy verilmemisse gri bir tonda goster*@
-        <a class="p-1" title="Up vote!">
-            <span class="oi oi-arrow-top entry-vote @(Vote == VoteType.UpVote ? "text-success":"text-secondary")" 
+        <a class="p-1" title="Oy ver!">
+            <span class="oi oi-arrow-top entry-vote @(Vote == VoteType.UpVote ? "text-success":"text-secondary")"
                   @onclick="(() => UpClicked())"> </span>
         </a>
 
-        <a class="p-3" title="Down vote!">
+        <a class="p-3" title="Oy verme!">
             <span class="oi oi-arrow-bottom entry-vote @(Vote == VoteType.DownVote ? "text-danger":"text-secondary")"
                   @onclick="(() => DownClicked())"> </span>
         </a>

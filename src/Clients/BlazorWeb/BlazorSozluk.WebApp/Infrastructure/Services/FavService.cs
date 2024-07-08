@@ -13,7 +13,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
             this.client = client;
         }
 
-        public async Task CreateEntryFav(Guid? entryId)
+        public async Task CreateEntryFav(Guid entryId)
         {
             await client.PostAsync($"https://localhost:7068/api/favorite/Entry/{entryId}", null);
         }
@@ -23,7 +23,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
             await client.PostAsync($"https://localhost:7068/api/favorite/EntryComment/{entryCommentId}", null);
         }
 
-        public async Task DeleteEntryFav(Guid? entryId)
+        public async Task DeleteEntryFav(Guid entryId)
         {
             await client.PostAsync($"https://localhost:7068/api/favorite/DeleteEntryFav/{entryId}", null);
         }
