@@ -104,6 +104,20 @@
     public string EntriesSubject { get; set; } = "bugün";
     private EntriesComponent entriesComponent;
 
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    private UserDetailViewModel userDetail = new();
+
+    [Inject]
+    IUserService userService { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } // Sisteme giris yapan kullanicinin bilgielrini alabilmek icin
+
     private string searchText;
     private bool showSearchResult;
     private List<SearchEntryViewModel> searchResults = new List<SearchEntryViewModel>();
@@ -119,9 +133,11 @@
         await entriesComponent.RefreshList();
     }
 
-    private void NavigateMEPage()
+    private async Task NavigateMEPage()
     {
-        navigationManager.NavigateTo("/me");
+        UserId = await authenticationStateProvider.GetUserId(); // Sisteme giris yapan kullanicinin id'si
+        userDetail = await userService.GetUserDetail(UserId); // Sisteme giris yapan kullanicinin bilgileri
+        navigationManager.NavigateTo($"/profile/{userDetail.UserName}"); // Sisteme giris yapan kulanicinin userName'ini aldik
     }
 
     private void NavigateLoginPage()

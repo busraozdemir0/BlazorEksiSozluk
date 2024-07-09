@@ -55,7 +55,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("Update")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
         {
             var guid = await mediator.Send(command);
@@ -73,7 +73,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
 
         [HttpPost]
         [Route("ChangePassword")]
-        [Authorize]
+       //[Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangeUserPasswordCommand command)
         {
             if (!command.UserId.HasValue) // Eger UserId bilgisi bos ise

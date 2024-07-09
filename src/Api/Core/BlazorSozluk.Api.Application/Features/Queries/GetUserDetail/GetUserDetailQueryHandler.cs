@@ -27,8 +27,10 @@ namespace BlazorSozluk.Api.Application.Features.Queries.GetUserDetail
 
             if (request.UserId != Guid.Empty)
                 dbUser = await userRepository.GetByIdAsync(request.UserId);
-            else if (!string.IsNullOrEmpty(request.UserName))
+            if (!string.IsNullOrEmpty(request.UserName))
                 dbUser = await userRepository.GetSingleAsync(i => i.UserName == request.UserName);
+
+            // TODO if both are empty, throw new exception
 
             return mapper.Map<UserDetailViewModel>(dbUser);
         }

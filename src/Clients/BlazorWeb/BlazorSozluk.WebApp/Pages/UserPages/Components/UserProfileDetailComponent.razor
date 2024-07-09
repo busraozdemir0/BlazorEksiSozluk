@@ -140,7 +140,7 @@
                 UserId = await authenticationStateProvider.GetUserId(); // Bu bize sisteme giris yapmis olan kullanicinin id'sini donecek
             }
 
-            userDetail = await userService.GetUserDetail(UserName);
+            userDetail = await userService.GetUserDetail(UserId);
         }
 
         emailBeforeChange = userDetail.EmailAddress; // Email bilgisi degistirilmeden onceki emailini bir degiskende sakliyoruz
@@ -148,7 +148,8 @@
         var myUserName = await localStorageService.GetUserName();
         var myUserId = await localStorageService.GetUserId();
 
-        isMyProfile = userDetail.UserName == myUserName || myUserId == userDetail.Id;
+        isMyProfile = userDetail.UserName == myUserName || myUserId == userDetail.Id; // Eger userDetail objesindeki UserName ile sisteme giris yapan kullanicinin userName'i esitse veye
+                                                //+ userDetaildaki Id bilgisi ile sisteme giris yapmis olan kullanicinin id'si esitse giriş yapan kullanıcının kendi bilgilerini guncelleyebilecegi alan gosterecegiz.
     }
 
     public async Task OnSaveClicked()

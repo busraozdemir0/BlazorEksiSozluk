@@ -17,6 +17,11 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
 {
     public class IdentityService : IIdentityService
     {
+        private JsonSerializerOptions defaultJsonOpt => new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         private readonly HttpClient httpClient;
         private readonly ISyncLocalStorageService syncLocalStorageService;
         private readonly AuthenticationStateProvider authenticationStateProvider;
@@ -43,6 +48,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
         {
             return syncLocalStorageService.GetUserId();
         }
+
         public async Task<bool> Login(LoginUserCommand command)
         {
             string responseStr;
@@ -53,7 +59,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
                 if (httpResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     responseStr = await httpResponse.Content.ReadAsStringAsync();
-                    var validation = JsonSerializer.Deserialize<ValidationResponseModel>(responseStr);
+                    var validation = JsonSerializer.Deserialize<ValidationResponseModel>(responseStr, defaultJsonOpt);
                     responseStr = validation.FlattenErrors;
                     throw new DatabaseValidationException(responseStr);
                 }
@@ -61,10 +67,11 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
                 return false;
             }
 
+
             responseStr = await httpResponse.Content.ReadAsStringAsync();
             var response = JsonSerializer.Deserialize<LoginUserViewModel>(responseStr);
 
-            if (!string.IsNullOrEmpty(response.Token)) // login success 
+            if (!string.IsNullOrEmpty(response.Token)) // login success
             {
                 syncLocalStorageService.SetToken(response.Token);
                 syncLocalStorageService.SetUsername(response.UserName);
@@ -73,11 +80,11 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
                 // Sisteme giris yapildiginda UserName ve userId bilgisini set ediyoruz
                 ((AuthStateProvider)authenticationStateProvider).NotifyUserLogin(response.UserName, response.Id);
 
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", response.UserName);
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", response.Token);
 
                 return true;
-
             }
+
             return false;
         }
 

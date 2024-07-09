@@ -23,7 +23,7 @@ namespace BlazorSozluk.Api.Application.Mapping
             CreateMap<User, UpdateUserCommand>()
              .ReverseMap();
 
-            CreateMap<UserDetailViewModel, User>()
+            CreateMap<User, UserDetailViewModel>()
              .ReverseMap();
 
             CreateMap<Entry, CreateEntryCommand>()
@@ -35,6 +35,9 @@ namespace BlazorSozluk.Api.Application.Mapping
             // Bu ViewModel'de CommentCount alani Entry'de olmadigi icin bu alani otomatik set edemeyeceginden EntryComments altindaki Count bilgisini set etmesi gerektigini soyledik.
             CreateMap<Entry, GetEntriesViewModel>()
                 .ForMember(x => x.CommentCount, y => y.MapFrom(z => z.EntryComments.Count));
+
+            CreateMap<Entry, GetEntryDetailViewModel>()
+                .ReverseMap();
         }
     }
 }

@@ -28,11 +28,11 @@ namespace BlazorSozluk.Api.Application.Features.Commands.User.ChangePassword
             var dbUser = await userRepository.GetByIdAsync(request.UserId.Value);
 
             if (dbUser is null)
-                throw new DatabaseValidationException("User not found!");
+                throw new DatabaseValidationException("Kullanıcı bulunamadı!");
 
             var encPass = PasswordEncryptor.Encrpt(request.OldPassword); // Girilen eski sifreyi hashledikten sonra db'deki sifre ile karsilastiracagiz
             if(dbUser.Password != encPass) // Girdigi eski sifre veritabaninda kayitli olan sifresi ile eslesiyor mu?
-                throw new DatabaseValidationException("Old password wrong!");
+                throw new DatabaseValidationException("Eski şifre yanlış!");
 
             dbUser.Password = PasswordEncryptor.Encrpt(request.NewPassword); // Hta firlatilmamissa yeni password hashlenerek db'deki Password alanina kaydediliyor
 

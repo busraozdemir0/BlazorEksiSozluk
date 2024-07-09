@@ -15,9 +15,9 @@ namespace BlazorSozluk.WebApp.Infrastructure.Auth
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var token = syncLocalStorageService.GetToken(); // Local storage'den token'i getir
-            
+
             // Token bilgisi yer aliyorsa bunu bearer ile kullan
-            if(string.IsNullOrEmpty(token) && request.Headers.Authorization is null)
+            if (!string.IsNullOrEmpty(token) && (request.Headers.Authorization is null || string.IsNullOrEmpty(request.Headers.Authorization.Parameter)))
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", token);
 
             return base.SendAsync(request, cancellationToken);

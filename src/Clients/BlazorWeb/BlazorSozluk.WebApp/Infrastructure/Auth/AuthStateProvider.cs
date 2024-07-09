@@ -14,7 +14,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Auth
         public AuthStateProvider(ILocalStorageService localStorage)
         {
             this.localStorage = localStorage;
-            this.anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            anonymous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
