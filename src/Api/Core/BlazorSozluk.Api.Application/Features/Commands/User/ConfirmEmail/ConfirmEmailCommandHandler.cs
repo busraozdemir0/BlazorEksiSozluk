@@ -25,15 +25,15 @@ namespace BlazorSozluk.Api.Application.Features.Commands.User.ConfirmEmail
             var confirmation = await emailConfirmationRepository.GetByIdAsync(request.ConfirmationId);
 
             if (confirmation is null)
-                throw new DatabaseValidationException("Confirmation not found!");
+                throw new DatabaseValidationException("Onay bulunamadı!");
 
             var dbUser = await userRepository.GetSingleAsync(i => i.EmailAddress == confirmation.NewEmailAddress);
 
             if (dbUser is null)
-                throw new DatabaseValidationException("User not found with this email!"); // bu emaile ait kullanici bulunamadi
+                throw new DatabaseValidationException("Bu e-postayla kullanıcı bulunamadı!"); // bu emaile ait kullanici bulunamadi
 
             if (dbUser.EmailConfirmed)
-                throw new DatabaseValidationException("Email address is already confirmed!"); // EmailConfirmation alani true ise bu emaili zaten dogrulanmis hatasi dondurur.
+                throw new DatabaseValidationException("Bu Email adresi zaten onaylanmış!"); // EmailConfirmation alani true ise bu emaili zaten dogrulanmis hatasi dondurur.
 
             dbUser.EmailConfirmed = true;
             await userRepository.UpdateAsync(dbUser);

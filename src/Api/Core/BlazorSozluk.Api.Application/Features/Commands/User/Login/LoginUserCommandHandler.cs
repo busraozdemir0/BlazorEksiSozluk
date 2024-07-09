@@ -36,16 +36,16 @@ namespace BlazorSozluk.Api.Application.Features.Commands.User.Login
 
             // db'de user gercekten var mi bos mu diye bakiliyor
             if (dbUser == null)
-                throw new DatabaseValidationException("User not found!"); // Kendi yazdigimiz custom exception
+                throw new DatabaseValidationException("Kullanıcı bulunamadı!"); // Kendi yazdigimiz custom exception
 
             // Sifre kontrolu
             var pass = PasswordEncryptor.Encrpt(request.Password); // Disardan gelen sifreyi hashliyoruz ve db'deki sifre ile ayni olup olmadigini kontrol ediyoruz.
             if (dbUser.Password != pass)
-                throw new DatabaseValidationException("Password is wrong!");
+                throw new DatabaseValidationException("Yanlış şifre!");
 
             // Email onaylanmamissa yine hata firlatilacak
             if (!dbUser.EmailConfirmed)
-                throw new DatabaseValidationException("Email address is not confirmed yet!");
+                throw new DatabaseValidationException("Bu Email adresi henüz onaylanmamış!");
 
             var result = mapper.Map<LoginUserViewModel>(dbUser);
 
