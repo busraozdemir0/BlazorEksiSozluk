@@ -67,36 +67,43 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     #endregion
 
     #region Delete Methods
+
     public virtual Task<int> DeleteAsync(TEntity entity)
     {
         if (dbContext.Entry(entity).State == EntityState.Detached)
         {
             this.entity.Attach(entity);
         }
+
         this.entity.Remove(entity);
 
         return dbContext.SaveChangesAsync();
     }
+
     public virtual Task<int> DeleteAsync(Guid id)
     {
         var entity = this.entity.Find(id);
         return DeleteAsync(entity);
     }
+
+    public virtual int Delete(Guid id)
+    {
+        var entity = this.entity.Find(id);
+        return Delete(entity);
+    }
+
     public virtual int Delete(TEntity entity)
     {
         if (dbContext.Entry(entity).State == EntityState.Detached)
         {
             this.entity.Attach(entity);
         }
+
         this.entity.Remove(entity);
 
         return dbContext.SaveChanges();
     }
-    public virtual int Delete(Guid id)
-    {
-        var entity = this.entity.Find(id);
-        return Delete(entity);
-    }
+
     public virtual bool DeleteRange(Expression<Func<TEntity, bool>> predicate)
     {
         dbContext.RemoveRange(entity.Where(predicate));

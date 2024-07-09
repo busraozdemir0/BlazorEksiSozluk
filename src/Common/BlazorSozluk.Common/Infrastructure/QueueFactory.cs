@@ -60,6 +60,34 @@ namespace BlazorSozluk.Common.Infrastructure
             consumer.Model.QueueBind(queueName, exchangeName, queueName);
             return consumer;
         }
+
+        public static EventingBasicConsumer Receive<T>(this EventingBasicConsumer consumer, Action<T> act)
+        {
+            // RabbitMQ'ya join islemi gerceklestiriyoruz
+            consumer.Received += (m, eventArgs) =>
+            { 
+                // RabbitMQ'nun event'ini dinliyor ve ardindan bir mesaj geldiginde okuyor
+                var body = eventArgs.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                var model = JsonSerializer.Deserialize<T>(message);
+
+                act(model);
+                consumer.Model.BasicAck(eventArgs.DeliveryTag, false); // isi bittiginde silinecek
+            };
+
+            return consumer;
+        }
+
+        public static EventingBasicConsumer StartConsuming(this EventingBasicConsumer consumer, string queueName)
+        {
+            // Verilen queue'yi consume yani tuketecegimizi RabbitMQ'ya bildiriyoruz
+            consumer.Model.BasicConsume(queue: queueName,
+                                        autoAck: false,
+                                        consumer: consumer);
+
+            return consumer;
+        }
     }
 
 }

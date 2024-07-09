@@ -4,12 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-BlazorSozluk.Projections.VoteService-531c342a-52a3-423a-818e-c6d151861c95</UserSecretsId>
+    <UserSecretsId>dotnet-BlazorSozluk.Projections.UserService-50019687-acd7-44eb-800a-6c30142bff89</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
