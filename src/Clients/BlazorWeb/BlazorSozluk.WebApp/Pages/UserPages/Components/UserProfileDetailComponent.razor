@@ -1,0 +1,189 @@
+﻿@if (userDetail is not null)
+{
+    <h1 class="text-white">@userDetail.UserName</h1>
+}
+
+@if (isMyProfile)
+{
+    <br />
+
+    @* Asagidaki butona bastikca form acilip kapanacak (onclick ile belirttigimiz showForm isleminden dolayi) *@
+    <input type="button" class="form-control btn-success btn-sozluk" value="Detayları Güncelle" @onclick="(() => showForm = !showForm)" />
+}
+
+@if (showForm) @*  Yukaridaki butona tiklanip showForm true oldugu anda asagidaki Form ekrani acilacak. Yukaridaki butona tekrar tiklanirsa showForm false olacagi ici bu form gosterilmeyecek *@
+{
+    <br />
+    <br />
+
+    <EditForm Model="@userDetail" OnValidSubmit="@OnSaveClicked">
+
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Kullanıcı Adı</div>
+                    </div>
+                    <InputText @bind-Value="@userDetail.UserName" class="form-control" placeholder="Kullanıcı Adı" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Adı</div>
+                    </div>
+                    <InputText @bind-Value="@userDetail.FirstName" class="form-control" placeholder="Adı" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Soyadı</div>
+                    </div>
+                    <InputText @bind-Value="@userDetail.LastName" class="form-control" placeholder="Soyadı" />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-auto">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">E-Mail</div>
+                    </div>
+                    <InputText @bind-Value="@userDetail.EmailAddress" class="form-control" placeholder="E-Mail" />
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <button type="submit" class="form-control btn-success w-auto">Kaydet</button>
+
+        <br /><br />
+        @* Sifre degistir butonuna tiklaninca sifre degistir alani gelecek. Bir daha tiklanirsa bu sifre degistirme ekrani kapanacak *@
+        <input type="button" class="form-control btn-dark bg-gradient" value="Şifre Değiştir"
+               @onclick="( () => showChangePasswordSection =! showChangePasswordSection)" />
+
+        @if (showChangePasswordSection)
+        {
+
+            @if (changePasswordErrorText != string.Empty)
+            {
+                <span class="text-danger">@changePasswordErrorText</span>
+                <br />
+            }
+
+            <div class="form-row">
+                <div class="col-auto">
+                    <InputText @bind-Value="@oldPassword" class="form-control mb-2" placeholder="Eski Şifre" />
+                    <InputText @bind-Value="@newPassword" class="form-control" placeholder="Yeni Şifre" />
+
+                    <br />
+
+                    <input type="button" class="form-control btn-success btn-sozluk" value="Kaydet" @onclick="@ChangePassword" />
+                </div>
+            </div>
+
+        }
+    </EditForm>
+}
+
+
+
+
+
+@code {
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+
+    [Inject]
+    ILocalStorageService localStorageService { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Inject]
+    NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    IUserService userService { get; set; }
+
+    private UserDetailViewModel userDetail = new();
+
+    private bool showForm;
+    private bool isMyProfile;
+    private string emailBeforeChange;
+    private bool showChangePasswordSection;
+    private string oldPassword;
+    private string newPassword;
+    private string changePasswordErrorText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(UserName))
+        {
+            userDetail = await userService.GetUserDetail(UserName);
+        }
+        else
+        {
+            if (UserId == Guid.Empty && string.IsNullOrEmpty(UserName))
+            {
+                UserId = await authenticationStateProvider.GetUserId(); // Bu bize sisteme giris yapmis olan kullanicinin id'sini donecek
+            }
+
+            userDetail = await userService.GetUserDetail(UserName);
+        }
+
+        emailBeforeChange = userDetail.EmailAddress; // Email bilgisi degistirilmeden onceki emailini bir degiskende sakliyoruz
+
+        var myUserName = await localStorageService.GetUserName();
+        var myUserId = await localStorageService.GetUserId();
+
+        isMyProfile = userDetail.UserName == myUserName || myUserId == userDetail.Id;
+    }
+
+    public async Task OnSaveClicked()
+    {
+        var success = await userService.UpdateUser(userDetail);
+
+        if(emailBeforeChange != userDetail.EmailAddress) // Sakladigimiz email bilgisi ile db'de olan email ayni degilse emaili degistirmistir. Bu sebeple gerekli islemler asagida yapilacaktir.
+        {
+            navigationManager.NavigateTo("/logout"); // Emailini degistirdiyse sistemden cikis yaptiriliyor. (Emailini dogrulamadiysa sisteme giremeyecek)
+        }
+
+        if (success) // Basarili bir sekilde guncelleme islemi yapilmissa form kapatilacak
+        {
+            showForm = false;
+        }
+    }
+
+    public async Task ChangePassword()
+    {
+        if (string.IsNullOrEmpty(oldPassword) || string.IsNullOrEmpty(newPassword)) // Eski ve yeni sifre alanlari bos ise
+        {
+            changePasswordErrorText = "Eski ve yeni şifre alanlarını doldurun.";
+            return;
+        }
+
+        try
+        {
+            var success = await userService.ChangeUserPassword(oldPassword, newPassword);
+
+            if (success) // Eger sifre degistirme islemi basarili ise sifre degistirme alani kapatilacak
+                showChangePasswordSection = false;
+        }
+        catch (DatabaseValidationException ex)
+        {
+            changePasswordErrorText = ex.Message;
+        }
+    }
+}

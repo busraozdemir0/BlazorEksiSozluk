@@ -9,16 +9,16 @@
 
                 @if (errorText != string.Empty) @* errorText bos degilse Login olurken bir hata alindiysa kirmizi sekilde uyari gosterilecek. *@
                 {
-                    <span class="text-danger">@errorText</span>
+                    <span class="text-danger mb-2">@errorText</span>
                     <br />
                 }
 
                 <div class="form-group">
-                    <input @bind-value="loginCommand.EmailAddress" class="form-control" type="text" placeholder="Email Adres" />
+                    <input @bind-value="loginCommand.EmailAddress" class="form-control mb-2 mt-2" type="text" placeholder="Email Adres" />
                 </div>
                 <br />
                 <div class="form-group">
-                    <input @bind-value="loginCommand.Password" class="form-control" type="password" placeholder="Parola" />
+                    <input @bind-value="loginCommand.Password" class="form-control mb-2" type="password" placeholder="Parola" />
                 </div>
                 <br />
                 <div class="form-group">
