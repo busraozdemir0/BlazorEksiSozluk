@@ -1,0 +1,38 @@
+﻿@* Bu sayfalama komponentini sayfalama yapmak istedigimiz sayfalara ekleyebiliriz *@
+
+@if (TotalPage > 0 && CurrentPage > 0)
+{
+    <div class="d-flex flex-row-reverse">
+        <div class="p-2">
+            <select class="form-select text-secondary" @onchange="Changed">
+                @for (int i = 0; i <= TotalPage; i++)
+                {
+                    if(CurrentPage == i)
+                    {
+                        <option value="@i" selected>@i</option>
+                    }
+                    else
+                    {
+                        <option value="@i">@i</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int TotalPage { get; set; }
+
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+
+    private async Task Changed(ChangeEventArgs e) // Sayfa secildiyse su anki sayfa secildi manasinda bu metod tetiklenecek
+    {
+        await OnPageChanged.InvokeAsync(int.Parse(e.Value.ToString()));
+    }
+}
