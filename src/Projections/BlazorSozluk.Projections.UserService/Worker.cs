@@ -16,7 +16,8 @@ namespace BlazorSozluk.Projections.UserService
             this.userService = userService;
             this.emailService = emailService;
         }
-
+        // RABBÝTMQ MANAGEMENT'E ULASMAK ÝCÝN DEFAULT OLAN 15672 PORTUNDAN ULASÝRÝZ => http://localhost:15672/
+        // Projections islemleri RabbitMQ vasitasiyla calistirilmaktadir.
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // ** Burasi calistigi zaman RabbitMQ'daki kuyruga (UserEmailChangedEvent kuyruguna) kendisini kayit edecek.
@@ -27,7 +28,8 @@ namespace BlazorSozluk.Projections.UserService
                  .EnsureExchange(SozlukConstants.UserExchangeName)
                  .EnsureQueue(SozlukConstants.UserEmailChangedQueueName, SozlukConstants.UserExchangeName)
                  .Receive<UserEmailChangedEvent>(user =>
-                 { // queue'ye bir sey geldiginde ne yapilacak
+                 { // *** Email degistirildiginde EmailConfirmation alani otomatikman false oluyor. Email onaylama asamasi icin
+                   //+ RabbitMQ yardimiyla bir kuyruk olusturup link olusturulmasini sagliyoruz. Bu linki swagger'da post ettigimizde ise EmailConfirmation alani true olacaktir.
 
                      // DB insert
                      var confirmationId = userService.CreateEmailConfirmation(user).GetAwaiter().GetResult();
@@ -35,7 +37,7 @@ namespace BlazorSozluk.Projections.UserService
                      // Generate link
                      var link = emailService.GenerateConfirmationLink(confirmationId);
 
-                     //Send Email
+                     //Send Email (Biz email gondermek yerine linki Console ekranina bastirmaktayiz.)
 
                      emailService.SendEMail(user.NewEmailAddress, link).GetAwaiter().GetResult();
 

@@ -64,7 +64,7 @@
 
         if (args.IsUpVoteClicked) // Eger yukari ok tusuna basilarak UpVote verme islemi yapilacak
         {
-           // await voteService.CreateEntryCommentUpVote(args.EntryId);
+            await voteService.CreateEntryCommentUpVote(args.EntryId);
             EntryComment.VoteType = VoteType.UpVote;
             return;
         }

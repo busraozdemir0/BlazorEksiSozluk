@@ -36,7 +36,7 @@ namespace BlazorSozluk.WebApp.Infrastructure.Services
             await CreateEntryVote(entryId, VoteType.DownVote);
         }
 
-        public async Task CreateCommentEntryUpVote(Guid entryCommentId)
+        public async Task CreateEntryCommentUpVote(Guid entryCommentId)
         {
             await CreateEntryCommentVote(entryCommentId, VoteType.UpVote);
         }

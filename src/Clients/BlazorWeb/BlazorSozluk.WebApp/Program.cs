@@ -15,6 +15,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddHttpClient("WebApiClient", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7068");
+    //client.BaseAddress = new Uri("http://localhost:8080"); // docker host'da calistirabilmek icin .yml uzantili dosyada belirttigimiz gibi 8080 portuna ayarliyoruz
 }).AddHttpMessageHandler<AuthTokenHandler>();
 
 builder.Services.AddScoped(sp =>

@@ -19,8 +19,8 @@ namespace BlazorSozluk.Api.Application.Features.Commands.Entry.CreateFav
                 queueName: SozlukConstants.CreateEntryFavQueueName,
                 obj: new CreateEntryFavEvent()
                 {
-                    EntryId=request.EntryId.Value,
-                    CreatedBy=request.UserId.Value
+                    EntryId=request.EntryId,
+                    CreatedBy=request.UserId
                 });
 
             return Task.FromResult(true);

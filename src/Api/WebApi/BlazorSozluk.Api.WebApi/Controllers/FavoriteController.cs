@@ -22,7 +22,7 @@ namespace BlazorSozluk.Api.WebApi.Controllers
         [Route("entry/{entryId}")]
         public async Task<IActionResult> CreateEntryFav(Guid entryId)
         {
-            var result = await mediator.Send(new CreateEntryFavCommand(entryId, UserId));
+            var result = await mediator.Send(new CreateEntryFavCommand(entryId, UserId.Value));
             return Ok(result);
         }
 

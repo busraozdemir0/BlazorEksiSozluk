@@ -2,7 +2,7 @@
 {
     public interface IVoteService
     {
-        Task CreateCommentEntryUpVote(Guid entryCommentId);
+        Task CreateEntryCommentUpVote(Guid entryCommentId);
         Task CreateEntryCommentDownVote(Guid entryCommentId);
         Task CreateEntryDownVote(Guid entryId);
         Task CreateEntryUpVote(Guid entryId);

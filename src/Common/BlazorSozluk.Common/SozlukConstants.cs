@@ -8,11 +8,19 @@ namespace BlazorSozluk.Common
 {
     public class SozlukConstants
     {
-        public const string RabbitMQHost = "localhost";
+#if DEBUG // Bu peroje debug ediliyorsa bu kisim dikkate alinsin
+    public const string RabbitMQHost = "localhost";
+    
+    // Proje docker icerisinde calisiyorsa yani debug etmiyorsak c_rabbitmq'ya ulasacak
+#else
+    public const string RabbitMQHost = "c_rabbitmq"; 
+
+#endif
+
         public const string DefaultExchangeType = "direct";
-   
+
         public const string UserExchangeName = "UserExchange";
-        public const string UserEmailChangedQueueName = "UserEmailExchangedQueue";
+        public const string UserEmailChangedQueueName = "UserEmailChangedQueue";
 
         public const string FavExchangeName = "FavExchange";
         public const string VoteExchangeName = "VoteExchange";

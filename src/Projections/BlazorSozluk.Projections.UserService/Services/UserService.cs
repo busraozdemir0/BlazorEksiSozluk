@@ -24,7 +24,7 @@ namespace BlazorSozluk.Projections.UserService.Services
 
             using var connection = new SqlConnection(connStr);
 
-            await connection.ExecuteAsync("Insert Into EmailConfirmation (Id, CreateDate, OldEmailAddress, NewEmailAddress) VALUES (@Id, GETDATE(), @OldEmailAddress, @NewEmailAddress)",
+            await connection.ExecuteAsync("Insert Into EmailConfirmation (Id, OldEmailAddress, NewEmailAddress, CreateDate) VALUES (@Id, @OldEmailAddress, @NewEmailAddress, GETDATE())",
                new
                {
                    Id = guid,
