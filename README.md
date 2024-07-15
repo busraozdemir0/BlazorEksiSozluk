@@ -32,6 +32,7 @@ giderek ilgili entry'e ait yorum yapabilir ya da ilgili entry'i favorilere ekley
 - Profilim sayfasında giriş yapan kullanıcı bilgilerini ya da şifresini güncelleyebilme
 - Entry listesi için sayfalama yapısı
 - Entry arama işlemi
+- RabbitMQ ile email onaylama işlemi
 
 # Projenin Görselleri
 
