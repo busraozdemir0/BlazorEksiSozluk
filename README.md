@@ -29,7 +29,7 @@ giderek ilgili entry'e ait yorum yapabilir ya da ilgili entry'i favorilere ekley
 - Listelenen Entry'ler içerisinde ilgili entry'nin detayına gidebilme
 - İlgili entry'e yorum yapabilme, favorilere ekleme, entry'e oy verme/vermeme (Up-Down)
 - Entry oluşturma
-- Profilim sayfasında kullanıcı bilgilerini ya da şifresini güncelleyebilme
+- Profilim sayfasında giriş yapan kullanıcı bilgilerini ya da şifresini güncelleyebilme
 - Entry listesi için sayfalama yapısı
 - Entry arama işlemi
 
