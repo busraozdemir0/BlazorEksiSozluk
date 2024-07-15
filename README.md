@@ -5,7 +5,7 @@
 Bu proje; Ekşi Sözlük sitesinin tasarımı ve çalışma mantığı göz önünde bulundurularak yapılmıştır. Giriş yapan kullanıcı kendi bilgilerini güncelleyebilir, entry oluşturabilir, var olan entry'lerin detaylarına
 giderek ilgili entry'e ait yorum yapabilir ya da ilgili entry'i favorilere ekleyebilmektedir.
 
-.Net Core 6.0 ve .Net Core 6.0 Web API kullanılarak geliştirilen sözlük sitesinde; RabbitMQ, Blazor, EF6 gibi teknolojileri aynı zamanda CQRS, Onion Architecture, MediatR gibi yaklaşımlar kullanılmaktadır. 
+.Net Core 6.0 ve .Net Core 6.0 Web API kullanılarak geliştirilen sözlük sitesinde; RabbitMQ, Blazor, EF6 gibi teknolojiler ve CQRS, Onion Architecture, MediatR gibi yaklaşımlar kullanılmaktadır. 
 ###
 
 # Kullanılan Teknolojiler & Yaklaşımlar
